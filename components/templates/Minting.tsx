@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text, VStack } from '@chakra-ui/react'
-import { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { NftContractContext } from '../../contexts/NftContractProvider'
 import { useConnectWallet } from '../../hooks/useConnectWallet'
 import { useMint } from '../../hooks/useMint'
@@ -12,7 +12,20 @@ const Component: React.FC = () => {
   const store = useContext(NftContractContext)
   const address = useAddress()
 
-  const { mint } = useMint()
+  const [quantity, setQuantity] = useState(1);
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    setQuantity(isNaN(value) ? 0 : value);
+  
+  };
+
+  const handleDecreaseQuantity = () => {
+    setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
+  };
+  const handleIncreaseQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+  const { mint } = useMint(quantity)
   const { connectWallet } = useConnectWallet()
 
   return (
@@ -30,6 +43,20 @@ const Component: React.FC = () => {
           </Box>
 
           <div>
+
+      <label>
+        Quantity:
+        <Flex>
+                <Button onClick={handleDecreaseQuantity}>-</Button>
+                <input
+                  type="number"
+                  min="1"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                />
+                <Button onClick={handleIncreaseQuantity}>+</Button>
+              </Flex>
+      </label>
             {address ? (
               <Button onClick={mint} disabled={store.isClaiming}>
                 {store.isClaiming

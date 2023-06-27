@@ -33,5 +33,8 @@
     "eslint-plugin-react": "^7.30.0",
     "prettier": "^2.7.1",
     "typescript": "4.7.4"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/hanzochang/thirdweb-nftdrop-nextjs",
+  "license": "MIT"
 }
